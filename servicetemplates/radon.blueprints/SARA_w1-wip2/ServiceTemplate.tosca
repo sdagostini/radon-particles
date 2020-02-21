@@ -4,6 +4,20 @@ metadata:
   targetNamespace: radon.blueprints
 topology_template:
   node_templates:
+    CloudPlatform:
+      type: radon.nodes.abstract.CloudPlatform
+      metadata:
+        x: 358
+        y: 727
+        displayName: CloudRoboticPlatform_1
+      properties:
+        name: ""
+      requirements:
+        - dependency:
+            node: tosca.nodes.Root
+            relationship:
+              type: tosca.relationships.DependsOn
+            capability: tosca.capabilities.Node
     MySQLDBMS_2:
       type: radon.nodes.mysql.MySQLDBMS
       metadata:
@@ -82,6 +96,26 @@ topology_template:
             relationship:
               type: con_DependsOn_3
             capability: feature
+    Function:
+      type: radon.nodes.abstract.Function
+      metadata:
+        x: 335
+        y: 961
+        displayName: LocalizationFaaSFunction
+      properties:
+        environment: ""
+        name: ""
+      requirements:
+        - host:
+            node: CloudPlatform
+            relationship:
+              type: con_HostedOn_10
+            capability: host
+        - dependency:
+            node: tosca.nodes.Root
+            relationship:
+              type: tosca.relationships.DependsOn
+            capability: tosca.capabilities.Node
     AREASServer_w1-wip1_2:
       type: radon.nodes.sara.AREASServer_w1-wip1
       metadata:
@@ -104,8 +138,8 @@ topology_template:
       capabilities:
         os:
           properties:
-            type: "CentOS"
             distribution: "Linux"
+            type: "CentOS"
             version: "7"
             architecture: ""
         host:
@@ -220,6 +254,26 @@ topology_template:
             relationship:
               type: tosca.relationships.DependsOn
             capability: tosca.capabilities.Node
+    Function_2:
+      type: radon.nodes.abstract.Function
+      metadata:
+        x: 68
+        y: 810
+        displayName: NavigatonFaaSFunction
+      properties:
+        environment: ""
+        name: ""
+      requirements:
+        - host:
+            node: CloudPlatform
+            relationship:
+              type: con_HostedOn_11
+            capability: host
+        - dependency:
+            node: tosca.nodes.Root
+            relationship:
+              type: tosca.relationships.DependsOn
+            capability: tosca.capabilities.Node
     SARAWebApplication_w1-wip1:
       type: radon.nodes.sara.SARAWebApplication_w1-wip1
       metadata:
@@ -267,8 +321,8 @@ topology_template:
       capabilities:
         os:
           properties:
-            type: "CentOS"
             distribution: "Linux"
+            type: "CentOS"
             version: "7"
             architecture: ""
         host:
@@ -323,8 +377,8 @@ topology_template:
       capabilities:
         os:
           properties:
-            type: "CentOS"
             distribution: "Linux"
+            type: "CentOS"
             version: "7"
             architecture: ""
         host:
@@ -343,6 +397,8 @@ topology_template:
       type: tosca.relationships.HostedOn
     con_HostedOn_1:
       type: tosca.relationships.HostedOn
+    con_HostedOn_11:
+      type: tosca.relationships.HostedOn
     con_HostedOn_8:
       type: tosca.relationships.HostedOn
     con_HostedOn_9:
@@ -352,6 +408,8 @@ topology_template:
     con_HostedOn_7:
       type: tosca.relationships.HostedOn
     con_HostedOn_4:
+      type: tosca.relationships.HostedOn
+    con_HostedOn_10:
       type: tosca.relationships.HostedOn
     con_HostedOn_5:
       type: tosca.relationships.HostedOn
