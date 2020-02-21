@@ -68,7 +68,7 @@ topology_template:
       metadata:
         x: 638
         y: 763
-        displayName: PersonalHealthRcord_1
+        displayName: PersonalHealthRecord_1
       properties:
         component_version: ""
       requirements:
