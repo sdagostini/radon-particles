@@ -1,0 +1,369 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+metadata:
+  targetNamespace: radon.blueprints
+topology_template:
+  node_templates:
+    MySQLDBMS_2:
+      type: radon.nodes.mysql.MySQLDBMS
+      metadata:
+        x: 12
+        y: 526
+        displayName: SARA_DB_1
+      properties:
+        port: "3306"
+        root_password: "root"
+        component_version: "5.6"
+      requirements:
+        - host:
+            node: tosca.nodes.Compute
+            relationship:
+              type: tosca.relationships.HostedOn
+            capability: tosca.capabilities.Compute
+        - dependency:
+            node: tosca.nodes.Root
+            relationship:
+              type: tosca.relationships.DependsOn
+            capability: tosca.capabilities.Node
+    JavaRuntime:
+      type: radon.nodes.java.JavaRuntime
+      metadata:
+        x: 296
+        y: 157
+        displayName: JavaRuntime_1
+      properties:
+        component_version: ""
+      requirements:
+        - host:
+            node: CallCentreServer_w1-wip1
+            relationship:
+              type: con_HostedOn_0
+            capability: host
+        - dependency:
+            node: tosca.nodes.Root
+            relationship:
+              type: tosca.relationships.DependsOn
+            capability: tosca.capabilities.Node
+    JavaApplication_2:
+      type: radon.nodes.java.JavaApplication
+      metadata:
+        x: 1191
+        y: 100
+        displayName: PersonalHealthRecord_2
+      properties:
+        component_version: ""
+      requirements:
+        - host:
+            node: JavaRuntime_3
+            relationship:
+              type: con_HostedOn_8
+            capability: host
+        - dependency:
+            node: tosca.nodes.Root
+            relationship:
+              type: tosca.relationships.DependsOn
+            capability: tosca.capabilities.Node
+    SARAJavaApplication_w1-wip1:
+      type: radon.nodes.sara.SARAJavaApplication_w1-wip1
+      metadata:
+        x: 282
+        y: 572
+        displayName: CallDistributor_1
+      properties:
+        component_version: ""
+      requirements:
+        - host:
+            node: JavaRuntime
+            relationship:
+              type: con_HostedOn_1
+            capability: host
+        - dependency:
+            node: JavaApplication
+            relationship:
+              type: con_DependsOn_3
+            capability: feature
+    AREASServer_w1-wip1_2:
+      type: radon.nodes.sara.AREASServer_w1-wip1
+      metadata:
+        x: 1001
+        y: 609
+        displayName: AREASServer_2
+      properties:
+        location: "Germany"
+      requirements:
+        - local_storage:
+            node: tosca.nodes.Storage.BlockStorage
+            relationship:
+              type: tosca.relationships.AttachesTo
+            capability: tosca.capabilities.Attachment
+        - dependency:
+            node: tosca.nodes.Root
+            relationship:
+              type: tosca.relationships.DependsOn
+            capability: tosca.capabilities.Node
+      capabilities:
+        os:
+          properties:
+            type: "CentOS"
+            distribution: "Linux"
+            version: "7"
+            architecture: ""
+        host:
+          properties:
+            num_cpus: "4"
+            name: ""
+            disk_size: "80GB"
+            cpu_frequency: ""
+            mem_size: "8GB"
+    JavaRuntime_2:
+      type: radon.nodes.java.JavaRuntime
+      metadata:
+        x: 572
+        y: 1316
+        displayName: JavaRuntime_2
+      properties:
+        component_version: ""
+      requirements:
+        - host:
+            node: AREASServer_w1-wip1
+            relationship:
+              type: con_HostedOn_3
+            capability: host
+        - dependency:
+            node: tosca.nodes.Root
+            relationship:
+              type: tosca.relationships.DependsOn
+            capability: tosca.capabilities.Node
+    SARAJavaApplication_w1-wip1_2:
+      type: radon.nodes.sara.SARAJavaApplication_w1-wip1
+      metadata:
+        x: 638
+        y: 763
+        displayName: PersonalHealthRecord_1
+      properties:
+        component_version: ""
+      requirements:
+        - host:
+            node: JavaRuntime_2
+            relationship:
+              type: con_HostedOn_4
+            capability: host
+        - dependency:
+            node: MySQLDBMS
+            relationship:
+              type: con_DependsOn_2
+            capability: feature
+    JavaApplication:
+      type: radon.nodes.java.JavaApplication
+      metadata:
+        x: 17
+        y: 191
+        displayName: IAM
+      properties:
+        component_version: ""
+      requirements:
+        - host:
+            node: JavaRuntime
+            relationship:
+              type: con_HostedOn_6
+            capability: host
+        - dependency:
+            node: MySQLDBMS_2
+            relationship:
+              type: con_DependsOn_4
+            capability: feature
+    MySQLDBMS:
+      type: radon.nodes.mysql.MySQLDBMS
+      metadata:
+        x: 859
+        y: 999
+        displayName: AREAS_DB_1
+      properties:
+        port: "3306"
+        root_password: "root"
+        component_version: "5.6"
+      requirements:
+        - host:
+            node: AREASServer_w1-wip1
+            relationship:
+              type: con_HostedOn_5
+            capability: host
+        - dependency:
+            node: tosca.nodes.Root
+            relationship:
+              type: tosca.relationships.DependsOn
+            capability: tosca.capabilities.Node
+      capabilities:
+        host:
+          properties:
+            num_cpus: ""
+            name: ""
+            disk_size: ""
+            cpu_frequency: ""
+            mem_size: ""
+    JavaRuntime_3:
+      type: radon.nodes.java.JavaRuntime
+      metadata:
+        x: 1110
+        y: 435
+        displayName: JavaRuntime_3
+      properties:
+        component_version: ""
+      requirements:
+        - host:
+            node: AREASServer_w1-wip1_2
+            relationship:
+              type: con_HostedOn_7
+            capability: host
+        - dependency:
+            node: tosca.nodes.Root
+            relationship:
+              type: tosca.relationships.DependsOn
+            capability: tosca.capabilities.Node
+    SARAWebApplication_w1-wip1:
+      type: radon.nodes.sara.SARAWebApplication_w1-wip1
+      metadata:
+        x: 630
+        y: 456
+        displayName: OperatorWebApp_1
+      properties:
+        node_version: "10.16.0"
+        component_version: ""
+      requirements:
+        - health_data:
+            node: SARAJavaApplication_w1-wip1_2
+            relationship:
+              type: con_DependsOn_1
+            capability: feature
+        - host:
+            node: CallCentreServer_w1-wip1
+            relationship:
+              type: con_HostedOn_2
+            capability: host
+        - dependency:
+            node: SARAJavaApplication_w1-wip1
+            relationship:
+              type: con_DependsOn_0
+            capability: feature
+    AREASServer_w1-wip1:
+      type: radon.nodes.sara.AREASServer_w1-wip1
+      metadata:
+        x: 1129
+        y: 1234
+        displayName: AREASServer_1
+      properties:
+        location: "Italy"
+      requirements:
+        - local_storage:
+            node: tosca.nodes.Storage.BlockStorage
+            relationship:
+              type: tosca.relationships.AttachesTo
+            capability: tosca.capabilities.Attachment
+        - dependency:
+            node: tosca.nodes.Root
+            relationship:
+              type: tosca.relationships.DependsOn
+            capability: tosca.capabilities.Node
+      capabilities:
+        os:
+          properties:
+            type: "CentOS"
+            distribution: "Linux"
+            version: "7"
+            architecture: ""
+        host:
+          properties:
+            num_cpus: "4"
+            name: ""
+            disk_size: "80GB"
+            cpu_frequency: ""
+            mem_size: "8GB"
+    SARAWebApplication_w1-wip1_2:
+      type: radon.nodes.sara.SARAWebApplication_w1-wip1
+      metadata:
+        x: 879
+        y: 99
+        displayName: OperatorWebApp_2
+      properties:
+        node_version: "10.16.0"
+        component_version: ""
+      requirements:
+        - health_data:
+            node: radon.nodes.sara.SARAJavaApplication_w1-wip1
+            relationship:
+              type: tosca.relationships.DependsOn
+            capability: tosca.capabilities.Node
+        - host:
+            node: CallCentreServer_w1-wip1
+            relationship:
+              type: con_HostedOn_9
+            capability: host
+        - dependency:
+            node: JavaApplication_2
+            relationship:
+              type: con_DependsOn_5
+            capability: feature
+    CallCentreServer_w1-wip1:
+      type: radon.nodes.sara.CallCentreServer_w1-wip1
+      metadata:
+        x: 565
+        y: 85
+        displayName: CallCentreServer_1
+      requirements:
+        - local_storage:
+            node: tosca.nodes.Storage.BlockStorage
+            relationship:
+              type: tosca.relationships.AttachesTo
+            capability: tosca.capabilities.Attachment
+        - dependency:
+            node: tosca.nodes.Root
+            relationship:
+              type: tosca.relationships.DependsOn
+            capability: tosca.capabilities.Node
+      capabilities:
+        os:
+          properties:
+            type: "CentOS"
+            distribution: "Linux"
+            version: "7"
+            architecture: ""
+        host:
+          properties:
+            num_cpus: "4"
+            name: ""
+            disk_size: "80GB"
+            cpu_frequency: ""
+            mem_size: "8GB"
+  relationship_templates:
+    con_HostedOn_2:
+      type: tosca.relationships.HostedOn
+    con_HostedOn_3:
+      type: tosca.relationships.HostedOn
+    con_HostedOn_0:
+      type: tosca.relationships.HostedOn
+    con_HostedOn_1:
+      type: tosca.relationships.HostedOn
+    con_HostedOn_8:
+      type: tosca.relationships.HostedOn
+    con_HostedOn_9:
+      type: tosca.relationships.HostedOn
+    con_HostedOn_6:
+      type: tosca.relationships.HostedOn
+    con_HostedOn_7:
+      type: tosca.relationships.HostedOn
+    con_HostedOn_4:
+      type: tosca.relationships.HostedOn
+    con_HostedOn_5:
+      type: tosca.relationships.HostedOn
+    con_DependsOn_0:
+      type: tosca.relationships.DependsOn
+    con_DependsOn_1:
+      type: tosca.relationships.DependsOn
+    con_DependsOn_4:
+      type: tosca.relationships.DependsOn
+    con_DependsOn_5:
+      type: tosca.relationships.DependsOn
+    con_DependsOn_2:
+      type: tosca.relationships.DependsOn
+    con_DependsOn_3:
+      type: tosca.relationships.DependsOn
